@@ -23,7 +23,7 @@ const foodPositionGeneration = () => {
 };
 
 // Change score/speed. Draw food.
-const whenEatFood = (interval) => {
+const whenAteFood = (interval) => {
   ctx.fillStyle = "red";
   ctx.fillRect(foodX, foodY, cellSize, cellSize);
 
@@ -84,6 +84,8 @@ const snakeMoves = () => {
 
 // Just background.
 const backgroundGrid = () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   let gridX = 0;
 
   while (gridX < canvas.width) {
@@ -111,10 +113,9 @@ const endOfArea = () => {
 
 // Snake head.
 const snakeDraw = () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   x += dx;
   y += dy;
+  endOfArea();
   snakeTrail.unshift({ x, y });
 };
 
@@ -132,15 +133,15 @@ const bodyCollision = () => {
 
 const startGameLoop = () => {
   const intervalID = setInterval(() => {
-    snakeDraw();
     backgroundGrid();
-    whenEatFood(intervalID);
-    endOfArea();
-
+    snakeDraw();
+    whenAteFood(intervalID);
+    
     ctx.fillStyle = "lime";
     snakeTrail.forEach((segment) => {
       ctx.fillRect(segment.x, segment.y, cellSize, cellSize);
     });
+
     bodyCollision();
   }, gameSpeed);
 };
@@ -149,7 +150,6 @@ startGameLoop();
 foodPositionGeneration();
 snakeMoves();
 
-// repair end of area snake
 //food collision
 // menu
 //end game
