@@ -22,14 +22,16 @@ const foodPositionGeneration = () => {
 };
 
 //
-const foodDraw = () => {
+const foodDraw = (interval) => {
   ctx.fillStyle = "red";
   ctx.fillRect(foodX, foodY, cellSize, cellSize);
 
   if (x === foodX && y === foodY) {
     foodPositionGeneration();
-    gameSpeed -= 10;
-    console.log(gameSpeed)
+    gameSpeed -= 1;
+    clearInterval(interval);
+    startGameLoop();
+    
   } else snakeTrail.pop();
 };
 
@@ -110,29 +112,31 @@ const snakeDraw = () => {
 };
 
 // Snake body.
-
-const intervalID = setInterval(() => {
-  snakeDraw();
-  backgroundGrid();
-  foodDraw();
-  endOfArea();
-
-  ctx.fillStyle = "lime";
-  snakeTrail.forEach((segment) => {
-    ctx.fillRect(segment.x, segment.y, cellSize, cellSize);
-
-    // Body collision.
-    for (let i = 1; i < snakeTrail.length; i++) {
-      if (
-        snakeTrail[0].x === snakeTrail[i].x &&
-        snakeTrail[0].y === snakeTrail[i].y
-      ) {
-        console.log("konec");
+const startGameLoop = () => {
+  const intervalID = setInterval(() => {
+    snakeDraw();
+    backgroundGrid();
+    foodDraw(intervalID);
+    endOfArea();
+  
+    ctx.fillStyle = "lime";
+    snakeTrail.forEach((segment) => {
+      ctx.fillRect(segment.x, segment.y, cellSize, cellSize);
+  
+      // Body collision.
+      for (let i = 1; i < snakeTrail.length; i++) {
+        if (
+          snakeTrail[0].x === snakeTrail[i].x &&
+          snakeTrail[0].y === snakeTrail[i].y
+        ) {
+          console.log("konec");
+        }
       }
-    }
-  });
-}, gameSpeed);
+    });
+  }, gameSpeed);
+};
 
+startGameLoop();
 foodPositionGeneration();
 snakeMoves();
 
