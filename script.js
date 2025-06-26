@@ -15,22 +15,25 @@ let gameSpeed = 150; // Game speed/Snake speed.
 let foodX = undefined; // Food coordinates.
 let foodY = undefined; // Food coordinates.
 
-  // Just generation of food.
+// Just random generation of food.
 const foodPositionGeneration = () => {
   foodX = Math.floor(Math.random() * 25) * cellSize;
   foodY = Math.floor(Math.random() * 25) * cellSize;
 };
 
-  // Random spot of food.
+//
 const foodDraw = () => {
   ctx.fillStyle = "red";
   ctx.fillRect(foodX, foodY, cellSize, cellSize);
 
-  if (x === foodX && y === foodY) foodPositionGeneration();
-  else snakeTrail.pop();
+  if (x === foodX && y === foodY) {
+    foodPositionGeneration();
+    gameSpeed -= 10;
+    console.log(gameSpeed)
+  } else snakeTrail.pop();
 };
 
-  // When press button the snake moves.
+// When press button the snake moves.
 const snakeMoves = () => {
   window.addEventListener("keydown", (e) => {
     switch (e.key) {
@@ -70,7 +73,7 @@ const snakeMoves = () => {
   });
 };
 
-  // Just background.
+// Just background.
 const backgroundGrid = () => {
   let gridX = 0;
 
@@ -89,7 +92,7 @@ const backgroundGrid = () => {
   }
 };
 
-  // Teleport when touch end of the area.
+// Teleport when touch end of the area.
 const endOfArea = () => {
   if (x >= canvas.width) x = 0;
   if (x < 0) x = canvas.width - cellSize;
@@ -97,7 +100,7 @@ const endOfArea = () => {
   if (y < 0) y = canvas.height - cellSize;
 };
 
-  // Snake moves.
+// Snake head.
 const snakeDraw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -106,7 +109,9 @@ const snakeDraw = () => {
   snakeTrail.unshift({ x, y });
 };
 
-setInterval(() => {
+// Snake body.
+
+const intervalID = setInterval(() => {
   snakeDraw();
   backgroundGrid();
   foodDraw();
@@ -115,9 +120,25 @@ setInterval(() => {
   ctx.fillStyle = "lime";
   snakeTrail.forEach((segment) => {
     ctx.fillRect(segment.x, segment.y, cellSize, cellSize);
-  });
 
+    // Body collision.
+    for (let i = 1; i < snakeTrail.length; i++) {
+      if (
+        snakeTrail[0].x === snakeTrail[i].x &&
+        snakeTrail[0].y === snakeTrail[i].y
+      ) {
+        console.log("konec");
+      }
+    }
+  });
 }, gameSpeed);
 
 foodPositionGeneration();
 snakeMoves();
+
+// score
+// repair end of area snake
+// difficulty
+//food collision
+// menu
+//end game
