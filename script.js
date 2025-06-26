@@ -1,5 +1,6 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+const score = document.getElementById("score");
 
 let lastDirection = "right"; // Snake default direction.
 
@@ -21,17 +22,23 @@ const foodPositionGeneration = () => {
   foodY = Math.floor(Math.random() * 25) * cellSize;
 };
 
-//
-const foodDraw = (interval) => {
+// Change score/speed. Draw food.
+const whenEatFood = (interval) => {
   ctx.fillStyle = "red";
   ctx.fillRect(foodX, foodY, cellSize, cellSize);
 
   if (x === foodX && y === foodY) {
     foodPositionGeneration();
+
+    // Change game speed (difficulty)
     gameSpeed -= 1;
     clearInterval(interval);
     startGameLoop();
-    
+
+    // Change score
+    let yourScore = Number(score.textContent);
+    yourScore += 1;
+    score.textContent = yourScore;
   } else snakeTrail.pop();
 };
 
@@ -111,28 +118,30 @@ const snakeDraw = () => {
   snakeTrail.unshift({ x, y });
 };
 
-// Snake body.
+// Body collision. (end game)
+const bodyCollision = () => {
+  for (let i = 1; i < snakeTrail.length; i++) {
+    if (
+      snakeTrail[0].x === snakeTrail[i].x &&
+      snakeTrail[0].y === snakeTrail[i].y
+    ) {
+      console.log("konec");
+    }
+  }
+};
+
 const startGameLoop = () => {
   const intervalID = setInterval(() => {
     snakeDraw();
     backgroundGrid();
-    foodDraw(intervalID);
+    whenEatFood(intervalID);
     endOfArea();
-  
+
     ctx.fillStyle = "lime";
     snakeTrail.forEach((segment) => {
       ctx.fillRect(segment.x, segment.y, cellSize, cellSize);
-  
-      // Body collision.
-      for (let i = 1; i < snakeTrail.length; i++) {
-        if (
-          snakeTrail[0].x === snakeTrail[i].x &&
-          snakeTrail[0].y === snakeTrail[i].y
-        ) {
-          console.log("konec");
-        }
-      }
     });
+    bodyCollision();
   }, gameSpeed);
 };
 
@@ -140,9 +149,7 @@ startGameLoop();
 foodPositionGeneration();
 snakeMoves();
 
-// score
 // repair end of area snake
-// difficulty
 //food collision
 // menu
 //end game
