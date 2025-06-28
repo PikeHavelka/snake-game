@@ -4,9 +4,27 @@ const score = document.getElementById("score");
 const finalScore = document.getElementById("finalScore");
 const dialog = document.getElementById("gameOverDialog");
 const restart = document.getElementById("restartGame");
+const bgMusic = document.getElementById("bgMusic");
+const soundWrapper = document.getElementById("soundIconWrapper");
+const soundOff = document.getElementById("soundOff");
+let play = false;
+
+// Background sound effect
+soundWrapper.addEventListener("click", () => {
+  if (play === false) {
+    bgMusic.volume = 0.5;
+    bgMusic.play();
+    soundOff.style = "display:none;"
+    play = true;
+  } else {
+    play = false;
+    bgMusic.pause();
+    soundOff.style = "display:inline;"
+  }
+});
 
 let lastDirection = "right"; // Snake default direction.
-let intervalID;
+let intervalID; // Global interval for reset
 
 let cellSize = 20; // Grid, snake and food size.
 let dx = cellSize; // Snake move;
@@ -132,16 +150,31 @@ const bodyCollision = () => {
       snakeTrail[0].y === snakeTrail[i].y
     ) {
       clearInterval(intervalID);
-      finalScore.textContent = score;
+      finalScore.textContent = score.textContent;
       dialog.showModal();
     }
   }
+};
+
+// Game restart.
+const restartGame = () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  snakeTrail = [{ x, y }];
+  x = 0;
+  y = 0;
+
+  gameSpeed = 150;
+  score.textContent = yourScore = 0;
+  clearInterval(intervalID);
+  startGameLoop();
 };
 
 restart.addEventListener("click", () => {
   dialog.close();
   restartGame();
 });
+// **********************
 
 const startGameLoop = () => {
   intervalID = setInterval(() => {
@@ -158,23 +191,6 @@ const startGameLoop = () => {
   }, gameSpeed);
 };
 
-const restartGame = () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  snakeTrail = [{ x, y }];
-  x = 0;
-  y = 0;
-
-  gameSpeed = 150;
-  score.textContent = yourScore = 0;
-  clearInterval(intervalID);
-  startGameLoop();
-};
-
 startGameLoop();
 foodPositionGeneration();
 snakeMoves();
-
-//food collision
-// menu
-//end game

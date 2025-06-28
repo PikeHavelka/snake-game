@@ -1,4 +1,69 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+
+  /* outline: 1px solid red; */
+}
+
 body {
-    background: black;
-    color: white;
+  max-width: 980px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.the-snake .nameOfTheGame {
+  margin: 1rem 0;
+  font-size: 3.5rem;
+}
+
+.the-snake .score {
+  display: block;
+  margin: 1rem 0;
+  font-size: 3.5rem;
+}
+
+.the-snake .sound-icon-wrapper {
+  position: relative;
+  cursor: pointer;
+  display: inline;
+}
+
+.the-snake .sound-off {
+  position: absolute;
+  left: 50%;
+}
+
+.the-snake .sound-off::before {
+  content: "";
+  display: block;
+  width: 2px;
+  height: 20px;
+  background-color: black;
+  transform: rotate(45deg);
+}
+
+.the-snake .game-over {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    padding: 2rem;
+}
+
+.the-snake .restart-game-btn {
+    padding: .3rem .2rem;
+    margin-top: .5rem;
+    cursor: pointer;
+}
+
+.the-snake .final-score {
+    font-weight: bold;
+}
+
+.the-snake .end-game-text {
+    text-transform: uppercase;
+    font-weight: bold;
 }
