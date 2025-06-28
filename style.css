@@ -67,3 +67,7 @@ body {
     text-transform: uppercase;
     font-weight: bold;
 }
+
+.the-snake .canvas {
+    border: 1px solid black;
+}

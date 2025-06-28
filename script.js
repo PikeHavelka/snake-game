@@ -115,7 +115,7 @@ const backgroundGrid = () => {
     let gridY = 0;
 
     while (gridY < canvas.height) {
-      ctx.strokeStyle = "lightgrey";
+      ctx.strokeStyle = "transparent"; // If you want to show grid just delete the name "transaprent"
       ctx.lineWidth = "1";
       ctx.strokeRect(gridX, gridY, cellSize, cellSize);
 
