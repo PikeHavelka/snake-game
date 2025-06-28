@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Snake</title>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <section>
@@ -12,7 +13,13 @@
         >Your browser doesn't support game The Snake
       </canvas>
 
-      <span id="score">0</span>
+      <span id="score" class="score">0</span>
+
+
+      <dialog id="gameOverDialog">
+        <p>KONEC HRY! Tvoje skóre: <span id="finalScore"></span></p>
+        <button id="restartGame">RESTART</button>
+      </dialog>
     </section>
     <script src="script.js"></script>
   </body>
