@@ -12,14 +12,14 @@ let play = false;
 // Background sound effect
 soundWrapper.addEventListener("click", () => {
   if (play === false) {
-    bgMusic.volume = 0.5;
+    bgMusic.volume = 0.3;
     bgMusic.play();
-    soundOff.style = "display:none;"
+    soundOff.style = "display:none;";
     play = true;
   } else {
     play = false;
     bgMusic.pause();
-    soundOff.style = "display:inline;"
+    soundOff.style = "display:inline;";
   }
 });
 
@@ -30,20 +30,31 @@ let cellSize = 20; // Grid, snake and food size.
 let dx = cellSize; // Snake move;
 let dy = 0; // Snake move;
 
-let x = 0; // Start position of the Snake.
-let y = 0; // Start position of the Snake.
+let x = 240; // Start position of the Snake.
+let y = 240; // Start position of the Snake.
 let snakeTrail = [{ x, y }]; // Body position.
 let gameSpeed = 150; // Game speed/Snake speed.
 
 let yourScore = Number(score.textContent);
+let collision = false;
 
 let foodX = undefined; // Food coordinates.
 let foodY = undefined; // Food coordinates.
 
 // Just random generation of food.
 const foodPositionGeneration = () => {
+do {
+  collision = false;
   foodX = Math.floor(Math.random() * 25) * cellSize;
   foodY = Math.floor(Math.random() * 25) * cellSize;
+
+  for (let i = 0; i < snakeTrail.length; i++) {
+    if (foodX === snakeTrail[i].x && foodY === snakeTrail[i].y) {
+      collision = true;
+      break;
+    };
+  };
+} while (collision);
 };
 
 // Change score/speed. Draw food.
@@ -160,13 +171,13 @@ const bodyCollision = () => {
 const restartGame = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  snakeTrail = [{ x, y }];
-  x = 0;
-  y = 0;
-
   gameSpeed = 150;
   score.textContent = yourScore = 0;
   clearInterval(intervalID);
+
+  snakeTrail = [{ x, y }];
+  x = 240;
+  y = 240;
   startGameLoop();
 };
 
@@ -182,6 +193,7 @@ const startGameLoop = () => {
     snakeDraw();
     whenAteFood(intervalID);
 
+    // Snake body coordinates
     ctx.fillStyle = "lime";
     snakeTrail.forEach((segment) => {
       ctx.fillRect(segment.x, segment.y, cellSize, cellSize);
